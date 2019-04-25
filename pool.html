@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>pool</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div id="vue_det">
+        <div @click="SmartChange(0)" style="width:40px;height:40px;background:#fff">开始</div>
+        <div class="pool" v-for="(item, index) in list">
+            <div @click="change(index)" v-if="item" style="width:40px;height:40px;background:#999;float:left">{{index}}</div>
+            <div @click="change(index)" v-if="!item" style="width:40px;height:40px;background:#fff;float:left">{{index}}</div>
+        </div>
+    </div>
+ 
+    <script src="https://cdn.bootcss.com/vue/2.6.4/vue.js"></script>
+    <script>
+        var vm = new Vue({
+                el: '#vue_det',
+                data: {
+                    list: [],
+                    i: 0
+                },
+                methods: {
+                    details: function () {
+                        return this.site + " - 学的不仅是技术，更是梦想！";
+                    },
+                    change (index) {
+                        // console.log(index)
+                        if (index === 99) {
+                            this.list[0] = !this.list[0]
+                            this.list[98] = !this.list[98]
+                            this.list[99] = !this.list[99]
+                        } else if (index === 0) {
+                            this.list[0] = !this.list[0]
+                            this.list[1] = !this.list[1]
+                            this.list[99] = !this.list[99]
+                        } else {
+                            // console.log('222')
+                            this.list[index] = !this.list[index]
+                            this.list[index - 1] = !this.list[index - 1]
+                            this.list[index + 1] = !this.list[index + 1]
+                        }
+                        // console.log(this.list)
+                        this.list = JSON.parse(JSON.stringify(this.list))
+                    },
+                    SmartChange (index) {
+                      if (this.i === 99) {
+                          return false
+                      }
+                      if (this.list[this.i] === true) {
+                          this.i = this.i + 1
+                          setTimeout(() => {
+                            this.SmartChange()  
+                          }, 10);
+                      } else {
+                          this.change(this.i + 1)
+                          setTimeout(() => {
+                              this.SmartChange()
+                          }, 10);
+                      }
+                    //   console.log('222222222',this.i)
+                    },
+                    go () {
+                        for (let index = 1; index < 101; index++) {
+                            this.list.push(Math.random() > 0.5 ? true : false)
+                        }
+                        console.log(this.list)
+                        let a = 0, b = 0
+                        this.list.map(val => {
+                            if (val) {
+                                a++
+                            } else {
+                                b++
+                            }
+                        })
+                        console.log(a, b)
+                    }
+                },
+                created () {
+                    this.go()
+                }
+            })
+    </script>
+</body>
+</html>
